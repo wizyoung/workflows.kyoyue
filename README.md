@@ -1,6 +1,16 @@
 # workflows.kyoyue
 优越加速Alfred Workflow，自动获取服务器信息，支持服务器ping值排序，支持热键生成对应条目的ss/ssr二维码，支持surge配置信息自动生成，支持自动/手动获取更新。
 
+-------
+
+操作GIF示意：
+
+![](https://github.com/wizyoung/workflows.kyoyue/blob/master/gofree.gif?raw=true)
+
+![](https://github.com/wizyoung/workflows.kyoyue/blob/master/ping.gif?raw=true)
+
+![](https://github.com/wizyoung/workflows.kyoyue/blob/master/update.gif?raw=true)
+
 ------------------
 
 **使用说明**：
