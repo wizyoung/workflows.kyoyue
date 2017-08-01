@@ -138,7 +138,7 @@ def main(wf):
         servers, traffic, duedate, passwd, port, method, protocol, obfs, ss, ssr = info
     except:
         wf.add_item('Error',
-                    '是不是用户信息输错了?键入yyset重新录入吧',
+                    '很有可能用户信息输错了, 键入yyset重新录入试试吧',
                     valid=False, icon='error.png')
         wf.send_feedback()
         return 0
