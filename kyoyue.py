@@ -23,11 +23,11 @@ def ping_ip(idx, ip):
     ping_info = commands.getoutput('ping -c 3 -t 3 ' + ip)
     connected = re.findall(r'\b(\d)\b packets received', ping_info)
     if connected[0] == '0':  # fail
-        return [idx, float('inf')]
+        return [idx, float('inf'), '0']
     else:
         avg_time = float(re.findall(
             r'stddev = [\d|.]+/([\d|.]+)', ping_info)[0])
-        return [idx, avg_time]
+        return [idx, avg_time, connected[0]]
 
 
 def pa(username, password):
@@ -160,8 +160,8 @@ def main(wf):
         for i in range(len(ping_result)):
             sort_idx = ping_result[i][0]
             title = '{:.2f}  ms {}{}'.format(ping_result[i][1], servers[sort_idx][0], servers[sort_idx][2])
-            subtitle = 'IP:{0}, port:{1}, encryption: {2}'.format(
-                servers[sort_idx][1], port, method)
+            subtitle = '[丢包率:{:.0f}%] IP:{}, port:{}, encryption: {}'.format(
+                (1 - float(ping_result[i][2]) / 3) * 100, servers[sort_idx][1], port, method)
             wf.add_item(title=title, subtitle=subtitle, arg='ss://' + base64.b64encode(ss[sort_idx]) + 'bound' + 'ssr://' + base64.b64encode(ssr[sort_idx]),
                 valid=True, icon='1.png')
 
