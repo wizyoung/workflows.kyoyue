@@ -12,17 +12,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def check_Update():
-    # 检查更新
-    if wf.update_available:
-        arg = ['', '', '', '', 'error']
-        arg = '$%'.join(arg)
-        wf.add_item(
-            title='有新版本更新', subtitle='', arg=arg,
-            valid=True, icon='update.png')
-    else:
-        wf.add_item('当前就是最新版!')
-
 def ping_ip(idx, ip):
     ''' ping 3 次输入的ip, 3次操作超过3s超时中断，返回无穷大
         返回 3 次 ping 的平均值
@@ -190,7 +179,9 @@ def main(wf):
                 valid=True, icon='surge.png')
 
     elif query == 'update':
-        check_Update()
+        wf.add_item('是否检查更新?', '回车开始检查更新并自升级',
+                autocomplete='workflow:update',
+                icon='update.png')
         wf.send_feedback()
         return
 
