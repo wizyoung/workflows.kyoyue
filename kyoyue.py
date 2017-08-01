@@ -12,6 +12,17 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+def check_Update():
+    # 检查更新
+    if wf.update_available:
+        arg = ['', '', '', '', 'error']
+        arg = '$%'.join(arg)
+        wf.add_item(
+            title='有新版本更新', subtitle='', arg=arg,
+            valid=True, icon='update.png')
+    else:
+        wf.add_item('Kyoyue Shadowsocks Workflow')
+
 def ping_ip(idx, ip):
     ''' ping 3 次输入的ip, 3次操作超过3s超时中断，返回无穷大
         返回 3 次 ping 的平均值
@@ -177,6 +188,11 @@ def main(wf):
                 server_name = server_name + server[0] + ', '
         wf.add_item(title='Surge配置信息生成', subtitle='点击fn或者ctrl依次复制相应配置信息', arg=surge_conf + 'bound' + server_name,
                 valid=True, icon='surge.png')
+
+    elif query == 'update':
+        check_Update()
+        wf.send_feedback()
+        return
 
     else:
         wf.add_item(
