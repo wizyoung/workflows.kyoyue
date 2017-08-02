@@ -43,11 +43,19 @@ def pa(username, password):
     }
 
     data = {'username': username, 'password': password}
-    z1 = s.post(url="https://www.kycloud.co/dologin.php",
+    z1 = s.post(url="http://www.kycloud.co/dologin.php",
                 data=data)  # 登陆后的网页界面抓取
-    userid = re.findall(pattern=r'action=productdetails&id=(\d+)', string=z1.content)[0]
 
-    link2 = 'https://www.kycloud.co/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
+    if str(z1)[-5:-2] != '200':
+        flag = 0  # network failed
+        return flag
+
+    userid = re.findall(pattern=r'action=productdetails&id=(\d+)', string=z1.content)
+    if userid == []:
+        flag = 1  # 信息错误
+        return flag
+    userid = userid[0]
+    link2 = 'http://www.kycloud.co/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
     z2 = s.get(url=link2)
     info = z2.content
 
@@ -135,11 +143,16 @@ def main(wf):
         return pa(username, userpasswd)
     try:
         info = wf.cached_data('post', wrapper, max_age=60 * 10)
+        # info = pa(username, userpasswd)
         servers, traffic, duedate, passwd, port, method, protocol, obfs, ss, ssr = info
-    except:
-        wf.add_item('Error',
-                    '很有可能用户信息输错了, 键入yyset重新录入试试吧',
-                    valid=False, icon='error.png')
+    except Exception as e:
+        if isinstance(info, int):
+            if info == 0:
+                wf.add_item('Error: 网络不通', '检查一下网络吧', valid=False, icon='error.png')
+            elif info == 1:
+                wf.add_item('Error: 账户错误', '是不是账号密码输错了？键入yyset重新输入吧', valid=False, icon='error.png')
+        else:
+            wf.add_item('Error: 未知错误，请联系开发者', 'Exception: ' + e.message, valid=False, icon='error.png')
         wf.send_feedback()
         return 0
 
