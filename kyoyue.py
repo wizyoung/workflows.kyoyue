@@ -43,7 +43,7 @@ def pa(username, password):
     }
 
     data = {'username': username, 'password': password}
-    z1 = s.post(url="http://www.kycloud.co/dologin.php",
+    z1 = s.post(url="http://www.kycloud.me/dologin.php",
                 data=data)  # 登陆后的网页界面抓取
 
     if str(z1)[-5:-2] != '200':
@@ -55,7 +55,7 @@ def pa(username, password):
         flag = 1  # 信息错误
         return flag
     userid = userid[0]
-    link2 = 'http://www.kycloud.co/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
+    link2 = 'http://www.kycloud.me/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
     z2 = s.get(url=link2)
     info = z2.content
 
