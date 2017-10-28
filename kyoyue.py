@@ -103,9 +103,9 @@ def pa(username, password):
     # server有n个元素，每个元素又有以上3个元素
     for s in servers:
         s[0] = name_prefix(re.sub(' ', '-', s[0]))
-        a = re.findall(pattern=r':(.*)】', string=s[2])
-        if a:
-            s[0] = s[0] + '(' + a[0] + 'T)'
+        # a = re.findall(pattern=r':(.*)】', string=s[2])
+        # if a:
+        #     s[0] = s[0] + '(' + a[0] + 'T)'
         b = re.search(pattern=r'流量已超', string=s[2])
         if b:
             s[2] = '->流量爆啦！'
@@ -200,7 +200,7 @@ def main(wf):
 
     else:
         wf.add_item(
-                title='已用流量:{0}, 剩余流量:{1}'.format(traffic[0], traffic[1]), subtitle='套餐: 100G  下次付费日期: ' + duedate[2] + '年' + \
+                title='已用流量:{0}, 剩余流量:{1}'.format(traffic[0], traffic[1]), subtitle='下次付费日期: ' + duedate[2] + '年' + \
                 duedate[1] + '月' + duedate[0] + '日' , arg='arg',
                 valid=False, icon='2.png')
 
