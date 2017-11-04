@@ -1,6 +1,6 @@
 # coding: utf-8
-import requests
 import re
+import requests
 from workflow import Workflow3
 import argparse
 import commands
@@ -41,9 +41,8 @@ def pa(username, password):
     "upgrade-insecure-requests": "1",
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36"
     }
-
     data = {'username': username, 'password': password}
-    z1 = s.post(url="http://www.kycloud.me/dologin.php",
+    z1 = s.post(url="https://www.kycloud.me/dologin.php",
                 data=data)  # 登陆后的网页界面抓取
 
     if str(z1)[-5:-2] != '200':
@@ -55,12 +54,12 @@ def pa(username, password):
         flag = 1  # 信息错误
         return flag
     userid = userid[0]
-    link2 = 'http://www.kycloud.me/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
+    link2 = 'https://www.kycloud.me/clientarea.php?action=productdetails&id=' + userid  # 服务器列表界面
     z2 = s.get(url=link2)
     info = z2.content
 
     # 流量
-    traffic = re.findall(pattern=r'\d+.\d+.GB', string=info)
+    traffic = re.findall(pattern=r'\d+.\d+.MB | \d+.\d+.GB', string=info)
     duedate = re.findall(pattern=r'下次付款日期 / (.*)</p>',
                          string=info)[0].split('/')  # 日，月，年
     passwd = re.findall(pattern=r"innerHTML='(\d+)", string=info)[0]
@@ -142,7 +141,8 @@ def main(wf):
     # cached_data 第二个参数为函数，是不能接收参数的，所以要wrap一下
         return pa(username, userpasswd)
     try:
-        info = wf.cached_data('post', wrapper, max_age=60 * 10)
+        info = '3'
+        info = wf.cached_data('post', wrapper, max_age= 60 * 10)
         # info = pa(username, userpasswd)
         servers, traffic, duedate, passwd, port, method, protocol, obfs, ss, ssr = info
     except Exception as e:
@@ -200,7 +200,7 @@ def main(wf):
 
     else:
         wf.add_item(
-                title='已用流量:{0}, 剩余流量:{1}'.format(traffic[0], traffic[1]), subtitle='下次付费日期: ' + duedate[2] + '年' + \
+                title='已用流量:{0}, 剩余流量:{1}'.format(traffic[0], traffic[-1]), subtitle='下次付费日期: ' + duedate[2] + '年' + \
                 duedate[1] + '月' + duedate[0] + '日' , arg='arg',
                 valid=False, icon='2.png')
 
